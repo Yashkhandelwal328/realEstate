@@ -1,3 +1,4 @@
+"use client";
 import { Facebook, Instagram, MessageCircle, Mail } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
 

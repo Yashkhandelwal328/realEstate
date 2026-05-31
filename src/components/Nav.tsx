@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Menu, MessageCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";

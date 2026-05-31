@@ -1,3 +1,4 @@
+"use client";
 export function SanskritDivider({ label = "ॐ" }: { label?: string }) {
   return (
     <div className="flex items-center justify-center gap-4 my-6 text-primary">

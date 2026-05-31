@@ -1,8 +1,12 @@
+"use client";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, MessageCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Particles } from "@/components/Particles";
-import krishna from "@/assets/krishna/k.png";
+import _krishna from "@/assets/krishna/k.png";
+
+// Next.js static imports return a StaticImageData object; extract the string src
+const krishna = typeof _krishna === "string" ? _krishna : (_krishna as any).src;
 
 export function Hero() {
   return (

@@ -1,18 +1,22 @@
+"use client";
 import { motion } from "framer-motion";
-import gangotri from "@/assets/groups/gangotri.jpeg";
-import anantam from "@/assets/groups/anantam.jpeg";
-import hka from "@/assets/groups/hka.jpeg";
-import sdg from "@/assets/groups/sdg.jpeg";
-import sg from "@/assets/groups/sg.jpeg";
-import omaxe from "@/assets/groups/omaxe.jpeg";
+import _gangotri from "@/assets/groups/gangotri.jpeg";
+import _anantam from "@/assets/groups/anantam.jpeg";
+import _hka from "@/assets/groups/hka.jpeg";
+import _sdg from "@/assets/groups/sdg.jpeg";
+import _sg from "@/assets/groups/sg.jpeg";
+import _omaxe from "@/assets/groups/omaxe.jpeg";
+
+// Next.js static imports return StaticImageData objects; extract string src
+const getSrc = (img: any): string => (typeof img === "string" ? img : img.src);
 
 const partners = [
-  { name: "Gangotri", logo: gangotri },
-  { name: "Anantam", logo: anantam },
-  { name: "Hare Krishna Ashiyana", logo: hka },
-  { name: "Shri Divine Group", logo: sdg },
-  { name: "Shri Group", logo: sg },
-  { name: "Omaxe", logo: omaxe },
+  { name: "Gangotri", logo: getSrc(_gangotri) },
+  { name: "Anantam", logo: getSrc(_anantam) },
+  { name: "Hare Krishna Ashiyana", logo: getSrc(_hka) },
+  { name: "Shri Divine Group", logo: getSrc(_sdg) },
+  { name: "Shri Group", logo: getSrc(_sg) },
+  { name: "Omaxe", logo: getSrc(_omaxe) },
 ];
 
 export function Partners() {

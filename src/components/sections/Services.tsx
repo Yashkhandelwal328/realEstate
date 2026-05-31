@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { LandPlot, Building2, Home, Store } from "lucide-react";
 

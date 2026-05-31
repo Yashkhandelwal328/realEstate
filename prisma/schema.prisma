@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  location    String
+  price       String
+  type        String
+  amenities   String[]
+  dimensions  String
+  isFeatured  Boolean  @default(false)
+  isAvailable Boolean  @default(true)
+  images      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inquiry {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  message    String
+  propertyId String?  // Optional, if they inquire about a specific property
+  status     String   @default("new") // e.g., new, read, resolved
+  createdAt  DateTime @default(now())
+}
+
+model Content {
+  id        String   @id @default(cuid())
+  section   String   @unique // e.g., 'hero', 'about'
+  data      Json     // Flexible JSON payload
+  updatedAt DateTime @updatedAt
+}

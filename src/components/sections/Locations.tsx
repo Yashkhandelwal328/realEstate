@@ -1,10 +1,20 @@
+"use client";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MapPin, LandPlot, Building2, Home, Store } from "lucide-react";
-import vrindavan from "@/assets/vrindavan/v2.jpg";
-import mathura from "@/assets/mathura.jpg";
-import barsana from "@/assets/barsana.jpg";
-import goverdhan from "@/assets/goverdhan.jpg";
+import _vrindavan from "@/assets/vrindavan/v2.jpg";
+import _mathura from "@/assets/mathura.jpg";
+import _barsana from "@/assets/barsana.jpg";
+import _goverdhan from "@/assets/goverdhan.jpg";
+
+// Next.js static imports return StaticImageData objects; extract string src
+const getSrc = (img: { src: string } | string): string =>
+  typeof img === "string" ? img : img.src;
+
+const vrindavan = getSrc(_vrindavan as any);
+const mathura = getSrc(_mathura as any);
+const barsana = getSrc(_barsana as any);
+const goverdhan = getSrc(_goverdhan as any);
 
 const locations = [
   { name: "Vrindavan", img: vrindavan, tag: "Land of Eternal Leela" },

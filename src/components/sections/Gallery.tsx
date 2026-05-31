@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -13,28 +14,36 @@ import k2 from "@/assets/krishna/k2.jpg";
 import k4 from "@/assets/krishna/k4.png";
 import k5 from "@/assets/krishna/k5.png";
 
+// In Next.js, static imports resolve to StaticImageData objects ({ src, width, height }).
+// We extract the .src string for use in <img> tags.
+const getSrc = (img: { src: string } | string): string =>
+  typeof img === "string" ? img : img.src;
+
 const images = [
-  { src: v0, alt: "Vrindavan view" },
-  { src: vp1, alt: "Vrindavan architecture" },
-  { src: k2, alt: "Krishna devotional art" },
-  { src: vp2, alt: "Vrindavan ghats" },
-  { src: v5, alt: "Vrindavan street" },
-  { src: vp3, alt: "Vrindavan temple" },
-  { src: k4, alt: "Krishna painting" },
-  { src: vp4, alt: "Vrindavan sunset" },
-  { src: v6, alt: "Vrindavan heritage" },
-  { src: vp5, alt: "Vrindavan landscape" },
-  { src: k5, alt: "Krishna divine art" },
+  { src: getSrc(v0), alt: "Vrindavan view" },
+  { src: getSrc(vp1), alt: "Vrindavan architecture" },
+  { src: getSrc(k2), alt: "Krishna devotional art" },
+  { src: getSrc(vp2), alt: "Vrindavan ghats" },
+  { src: getSrc(v5), alt: "Vrindavan street" },
+  { src: getSrc(vp3), alt: "Vrindavan temple" },
+  { src: getSrc(k4), alt: "Krishna painting" },
+  { src: getSrc(vp4), alt: "Vrindavan sunset" },
+  { src: getSrc(v6), alt: "Vrindavan heritage" },
+  { src: getSrc(vp5), alt: "Vrindavan landscape" },
+  { src: getSrc(k5), alt: "Krishna divine art" },
 ];
 
 export function Gallery() {
   const [open, setOpen] = useState<string | null>(null);
+
   return (
     <section id="gallery" className="relative py-28 bg-gradient-royal">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="font-label text-xs text-primary">Glimpses of Braj</p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl">A <span className="text-gradient-gold">Visual</span> Pilgrimage</h2>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl">
+            A <span className="text-gradient-gold">Visual</span> Pilgrimage
+          </h2>
         </div>
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
           {images.map((img, i) => (
@@ -47,15 +56,22 @@ export function Gallery() {
               onClick={() => setOpen(img.src)}
               className="block w-full mb-4 break-inside-avoid overflow-hidden rounded-xl gold-border group"
             >
-              <img src={img.src} alt={img.alt} className="w-full transition-transform duration-700 group-hover:scale-110" />
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full transition-transform duration-700 group-hover:scale-110"
+              />
             </motion.button>
           ))}
         </div>
       </div>
+
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
         <DialogContent className="max-w-4xl bg-background border-primary/30 p-2">
           <DialogTitle className="sr-only">Gallery image</DialogTitle>
-          {open && <img src={open} alt="Gallery enlarged" className="w-full h-auto rounded-lg" />}
+          {open && (
+            <img src={open} alt="Gallery enlarged" className="w-full h-auto rounded-lg" />
+          )}
         </DialogContent>
       </Dialog>
     </section>

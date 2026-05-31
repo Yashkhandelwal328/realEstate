@@ -1,6 +1,9 @@
+"use client";
 import { motion } from "framer-motion";
 import { SanskritDivider } from "@/components/SanskritDivider";
-import v1 from "@/assets/vrindavan/v1.jpg";
+import _v1 from "@/assets/vrindavan/v1.jpg";
+
+const v1 = typeof _v1 === "string" ? _v1 : (_v1 as any).src;
 
 const stats = [
   { k: "20+", v: "Years of Trust" },

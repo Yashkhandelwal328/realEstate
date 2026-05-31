@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { ShieldCheck, Award, Handshake, Sparkles, Scale, HeartHandshake } from "lucide-react";
 

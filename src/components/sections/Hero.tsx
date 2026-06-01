@@ -4,9 +4,11 @@ import { ArrowRight, MapPin, MessageCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Particles } from "@/components/Particles";
 import _krishna from "@/assets/krishna/k.png";
+import _krishnaMobile from "@/assets/krishna/mob_bg.png";
 
 // Next.js static imports return a StaticImageData object; extract the string src
 const krishna = typeof _krishna === "string" ? _krishna : (_krishna as any).src;
+const krishnaMobile = typeof _krishnaMobile === "string" ? _krishnaMobile : (_krishnaMobile as any).src;
 
 export function Hero() {
   return (
@@ -67,7 +69,10 @@ export function Hero() {
           className="relative h-[460px] md:h-[600px]"
         >
           <div className="absolute inset-0 rounded-[2rem] overflow-hidden ornate-frame animate-float-y">
-            <img src={krishna} alt="Lord Krishna divine art" className="w-full h-full object-cover" />
+            {/* Desktop Image */}
+            <img src={krishna} alt="Lord Krishna divine art" className="hidden md:block w-full h-full object-cover" />
+            {/* Mobile Image */}
+            <img src={krishnaMobile} alt="Lord Krishna divine art" className="block md:hidden w-full h-full object-cover" />
           </div>
         </motion.div>
       </div>

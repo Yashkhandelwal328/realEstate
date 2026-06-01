@@ -72,7 +72,7 @@ export function Hero() {
             {/* Desktop Image */}
             <img src={krishna} alt="Lord Krishna divine art" className="hidden md:block w-full h-full object-cover" />
             {/* Mobile Image */}
-            <img src={krishnaMobile} alt="Lord Krishna divine art" className="block md:hidden w-full h-full object-contain" />
+            <img src={krishnaMobile} alt="Lord Krishna divine art" className="block md:hidden w-full h-full object-cover" />
           </div>
         </motion.div>
       </div>

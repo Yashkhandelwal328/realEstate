@@ -97,14 +97,19 @@
   html { scroll-behavior: smooth; }
   body {
     background-color: #050510;
-    background-image: url('/meow.png');
-    background-size: cover;
+    background-image: url('/mob_bg.png');
+    background-size: 100% auto;
     background-repeat: no-repeat;
     background-position: top center;
-    background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;
+  }
+  @media (min-width: 768px) {
+    body {
+      background-image: url('/meow.png');
+      background-size: cover;
+    }
   }
   h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
   .font-display { font-family: var(--font-display); }

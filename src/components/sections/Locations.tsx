@@ -65,7 +65,7 @@ export function Locations({ properties = [] }: { properties?: any[] }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5"
             >
               {locations.map((location, i) => (
                 <motion.button
@@ -76,7 +76,7 @@ export function Locations({ properties = [] }: { properties?: any[] }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className="group relative h-[440px] overflow-hidden rounded-2xl border border-primary/10 bg-black/30 text-left shadow-elegant transition hover:border-primary/60"
+                  className="group relative h-[240px] md:h-[440px] overflow-hidden rounded-2xl border border-primary/10 bg-black/30 text-left shadow-elegant transition hover:border-primary/60"
                 >
                   <img
                     src={location.img}
@@ -89,8 +89,8 @@ export function Locations({ properties = [] }: { properties?: any[] }) {
                       <MapPin className="size-4" />
                       <span className="font-label text-[10px]">Braj Bhoomi</span>
                     </div>
-                    <h3 className="font-display text-3xl text-foreground">{location.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{location.tag}</p>
+                    <h3 className="font-display text-xl md:text-3xl text-foreground">{location.name}</h3>
+                    <p className="text-xs md:text-sm text-muted-foreground mt-1">{location.tag}</p>
                   </div>
                 </motion.button>
               ))}

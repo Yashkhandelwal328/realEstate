@@ -46,7 +46,7 @@ export function Hero() {
           </motion.p>
           <motion.div
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className="mt-8 flex flex-wrap gap-3"
+            className="mt-8 grid grid-cols-2 md:flex md:flex-wrap gap-3"
           >
             <Button asChild size="lg" className="bg-gradient-gold text-primary-foreground hover:opacity-90 rounded-full shadow-glow">
               <a href="#locations">Explore Properties <ArrowRight className="size-4" /></a>
@@ -54,7 +54,7 @@ export function Hero() {
             <Button asChild size="lg" variant="outline" className="rounded-full border-primary/40 text-foreground hover:bg-primary/10">
               <a href="#contact"><MapPin className="size-4" /> Contact Us</a>
             </Button>
-            <Button asChild size="lg" variant="ghost" className="rounded-full text-foreground hover:bg-accent/20">
+            <Button asChild size="lg" variant="ghost" className="col-span-2 md:col-span-1 rounded-full text-foreground hover:bg-accent/20">
               <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer">
                 <MessageCircle className="size-4" /> WhatsApp
               </a>

@@ -14,7 +14,7 @@ const links = [
   { href: "#contact", label: "Contact" },
 ];
 
-const WHATSAPP = "https://wa.me/919999999999?text=Hi%20Khandelwal%20Real%20Estate";
+const WHATSAPP = "https://whatsapp.com/channel/0029Vb7TSWyFCCoVpgoUA50i";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);

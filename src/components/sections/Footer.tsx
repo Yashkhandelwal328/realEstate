@@ -1,10 +1,10 @@
 "use client";
-import { Facebook, Instagram, MessageCircle, Mail } from "lucide-react";
+import { Instagram, MessageCircle, Mail, Pin } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
 
 export function Footer() {
   return (
-    <footer className="relative pt-20 pb-8 bg-gradient-royal border-t border-primary/20">
+    <footer className="relative pt-20 pb-8 border-t border-primary/20">
       <div className="container mx-auto px-4 grid md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-3">
@@ -36,13 +36,13 @@ export function Footer() {
         </div>
         <div>
           <div className="font-label text-xs text-primary mb-4">Connect</div>
-          <p className="text-sm text-muted-foreground">Anand Dham, NH-19, Mathura</p>
-          <p className="text-sm text-muted-foreground mt-1">info@khandelwalrealestate.in</p>
+          <p className="text-sm text-muted-foreground">Anand Dham Near Income Tax Office N.H-19 Mathura</p>
+          <p className="text-sm text-muted-foreground mt-1">Shailendrakhandelwal82@gmail.com</p>
           <div className="mt-4 flex gap-3">
-            <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><MessageCircle className="size-4" /></a>
-            <a href="#" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Facebook className="size-4" /></a>
-            <a href="#" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Instagram className="size-4" /></a>
-            <a href="mailto:info@khandelwalrealestate.in" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Mail className="size-4" /></a>
+            <a href="https://whatsapp.com/channel/0029Vb7TSWyFCCoVpgoUA50i" target="_blank" rel="noreferrer" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><MessageCircle className="size-4" /></a>
+            <a href="https://www.instagram.com/khandelwal_real_estate?igsh=NmlzeGZtN2ZrNzlm" target="_blank" rel="noreferrer" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Instagram className="size-4" /></a>
+            <a href="https://pin.it/4QXsCP4Hu" target="_blank" rel="noreferrer" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Pin className="size-4" /></a>
+            <a href="mailto:Shailendrakhandelwal82@gmail.com" className="size-10 rounded-full glass flex items-center justify-center hover:text-primary"><Mail className="size-4" /></a>
           </div>
         </div>
       </div>

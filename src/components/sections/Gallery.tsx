@@ -2,16 +2,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-const images = Array.from({ length: 7 }, (_, i) => ({
-  src: `/posters/${i + 1}.jpeg`,
-  alt: `Poster ${i + 1}`,
-}));
-
-export function Gallery() {
+export function Gallery({ posters = [] }: { posters?: string[] }) {
   const [open, setOpen] = useState<string | null>(null);
 
+  // Fallback to empty if no posters provided
+  const displayPosters = posters.length > 0 
+    ? posters.map(p => ({ src: p, alt: "Poster" })) 
+    : [];
+
   return (
-    <section id="gallery" className="relative py-28 bg-gradient-royal">
+    <section id="gallery" className="relative py-28">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="font-label text-xs text-primary">Gallery</p>
@@ -20,7 +20,7 @@ export function Gallery() {
           </h2>
         </div>
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-          {images.map((img, i) => (
+          {displayPosters.map((img, i) => (
             <motion.button
               key={i}
               initial={{ opacity: 0, y: 20 }}

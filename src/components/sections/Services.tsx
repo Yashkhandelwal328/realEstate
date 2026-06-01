@@ -11,7 +11,7 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="relative py-28 bg-gradient-royal">
+    <section id="services" className="relative py-28">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="font-label text-xs text-primary">What We Offer</p>

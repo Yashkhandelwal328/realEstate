@@ -12,7 +12,7 @@ const krishnaMobile = typeof _krishnaMobile === "string" ? _krishnaMobile : (_kr
 
 export function Hero() {
   return (
-    <section id="top" className="relative min-h-screen flex items-center bg-gradient-hero overflow-hidden pt-24">
+    <section id="top" className="relative min-h-screen flex items-center overflow-hidden pt-24">
       <Particles />
       {/* gold radial */}
       <div className="absolute -right-40 top-1/3 size-[600px] rounded-full bg-primary/20 blur-3xl" />
@@ -30,7 +30,7 @@ export function Hero() {
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
             className="font-display text-5xl md:text-7xl leading-[1.05] text-foreground"
           >
-            Find Your <span className="text-primary italic font-semibold">Dream Property</span> in the Sacred Land of Braj
+            Find Your <span className="text-gradient-gold italic">Dream Property</span> in the Sacred Land of Braj
           </motion.h1>
           <motion.p
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
@@ -49,7 +49,7 @@ export function Hero() {
               <a href="#contact"><MapPin className="size-4" /> Contact Us</a>
             </Button>
             <Button asChild size="lg" variant="ghost" className="col-span-2 md:col-span-1 rounded-full text-foreground hover:bg-accent/20">
-              <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer">
+              <a href="https://wa.me/919639014150?text=Hi%20Khandelwal%20Real%20Estate" target="_blank" rel="noreferrer">
                 <MessageCircle className="size-4" /> WhatsApp
               </a>
             </Button>

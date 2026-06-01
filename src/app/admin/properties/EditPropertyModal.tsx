@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { updateProperty } from "@/app/actions/property";
+import { updateProperty, uploadPropertyImages } from "@/app/actions/property";
 
 export function EditPropertyModal({ property }: { property: any }) {
   const [open, setOpen] = useState(false);
@@ -27,6 +27,18 @@ export function EditPropertyModal({ property }: { property: any }) {
     const formData = new FormData(e.currentTarget);
     
     try {
+      // 1. Upload new images if any are selected
+      let uploadedUrls: string[] = property.images || [];
+      const imageFiles = formData.getAll("images") as File[];
+      if (imageFiles.length > 0 && imageFiles[0].size > 0) {
+        const uploadData = new FormData();
+        imageFiles.forEach(f => uploadData.append("images", f));
+        const res = await uploadPropertyImages(uploadData);
+        if (res.success && res.urls) {
+          uploadedUrls = res.urls; // Replace existing with new ones
+        }
+      }
+
       await updateProperty(property.id, {
         title: (formData.get("title") as string) || "",
         description: (formData.get("description") as string) || "",
@@ -36,7 +48,7 @@ export function EditPropertyModal({ property }: { property: any }) {
         amenities: ((formData.get("amenities") as string) || "").split(",").map(a => a.trim()).filter(Boolean),
         dimensions: (formData.get("dimensions") as string) || "", 
         isFeatured: formData.get("isFeatured") === "on",
-        images: ((formData.get("images") as string) || "").split(",").map(i => i.trim()).filter(Boolean),
+        images: uploadedUrls,
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
       });
       setOpen(false);
@@ -121,8 +133,11 @@ export function EditPropertyModal({ property }: { property: any }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="images">Photos (comma-separated URLs)</Label>
-            <Input id="images" name="images" required defaultValue={property.images?.join(", ")} placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
+            <Label htmlFor="images">Photos (Upload new to replace existing)</Label>
+            {property.images && property.images.length > 0 && (
+              <p className="text-xs text-muted-foreground mb-2">Currently has {property.images.length} photos.</p>
+            )}
+            <Input id="images" name="images" type="file" multiple accept="image/*" />
           </div>
           
           <div className="space-y-2">

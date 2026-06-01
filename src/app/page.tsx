@@ -1,5 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/sections/Hero";
+import { LeadPopup } from "@/components/LeadPopup";
 import { About } from "@/components/sections/About";
 import { Locations } from "@/components/sections/Locations";
 import { WhyUs } from "@/components/sections/WhyUs";
@@ -11,14 +12,19 @@ import { Footer } from "@/components/sections/Footer";
 
 import prisma from "@/lib/db";
 
+import { getPosters } from "@/app/actions/posters";
+
 export default async function Home() {
   const properties = await prisma.property.findMany({
     where: { isAvailable: true },
     orderBy: { createdAt: "desc" },
   });
+  
+  const posters = await getPosters();
 
   return (
     <main className="overflow-x-hidden">
+      <LeadPopup />
       <Nav />
       <Hero />
       <About />
@@ -26,7 +32,7 @@ export default async function Home() {
       <WhyUs />
       <Partners />
       <Testimonials />
-      <Gallery />
+      <Gallery posters={posters} />
       <Contact />
       <Footer />
     </main>

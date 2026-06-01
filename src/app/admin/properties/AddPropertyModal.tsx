@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createProperty } from "@/app/actions/property";
+import { createProperty, uploadPropertyImages } from "@/app/actions/property";
 
 export function AddPropertyModal() {
   const [open, setOpen] = useState(false);
@@ -27,6 +27,19 @@ export function AddPropertyModal() {
     const formData = new FormData(e.currentTarget);
     
     try {
+      // 1. Upload images if any
+      let uploadedUrls: string[] = [];
+      const imageFiles = formData.getAll("images") as File[];
+      if (imageFiles.length > 0 && imageFiles[0].size > 0) {
+        const uploadData = new FormData();
+        imageFiles.forEach(f => uploadData.append("images", f));
+        const res = await uploadPropertyImages(uploadData);
+        if (res.success && res.urls) {
+          uploadedUrls = res.urls;
+        }
+      }
+
+      // 2. Create property
       await createProperty({
         title: (formData.get("title") as string) || "",
         description: (formData.get("description") as string) || "",
@@ -36,7 +49,7 @@ export function AddPropertyModal() {
         amenities: ((formData.get("amenities") as string) || "").split(",").map(a => a.trim()).filter(Boolean),
         dimensions: (formData.get("dimensions") as string) || "", 
         isFeatured: formData.get("isFeatured") === "on",
-        images: ((formData.get("images") as string) || "").split(",").map(i => i.trim()).filter(Boolean),
+        images: uploadedUrls,
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
       });
       setOpen(false);
@@ -121,8 +134,8 @@ export function AddPropertyModal() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="images">Photos (comma-separated URLs)</Label>
-            <Input id="images" name="images" required placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
+            <Label htmlFor="images">Photos (Upload multiple)</Label>
+            <Input id="images" name="images" type="file" multiple accept="image/*" required />
           </div>
           
           <div className="space-y-2">

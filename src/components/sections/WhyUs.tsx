@@ -13,7 +13,7 @@ const features = [
 
 export function WhyUs() {
   return (
-    <section className="relative py-28 bg-gradient-royal">
+    <section className="relative py-28">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <p className="font-label text-xs text-primary">Why Choose Us</p>

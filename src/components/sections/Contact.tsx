@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-const PHONE = "+91 99999 99999";
-const PHONE_DIGITS = "919999999999";
-const EMAIL = "info@khandelwalrealestate.in";
-const ADDRESS = "Anand Dham, Near Income Tax Office, NH-19, Mathura";
+const PHONE = "+91 96390 14150";
+const PHONE_DIGITS = "919639014150";
+const EMAIL = "Shailendrakhandelwal82@gmail.com";
+const ADDRESS = "Anand Dham Near Income Tax Office N.H-19 Mathura";
 
 export function Contact() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });

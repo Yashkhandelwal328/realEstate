@@ -51,9 +51,9 @@
   --popover: oklch(0.18 0.04 270 / 40%);
   --popover-foreground: oklch(0.96 0.02 85);
 
-  /* Deep Maroon - high contrast against the bright sunset */
-  --primary: oklch(0.38 0.13 25);
-  --primary-foreground: oklch(0.97 0.02 85);
+  /* Sleek Silver - high contrast against the dark background */
+  --primary: #E5E7EB;
+  --primary-foreground: #050505;
 
   /* Deep maroon */
   --secondary: oklch(0.38 0.13 25);
@@ -79,7 +79,7 @@
   --peacock: oklch(0.55 0.11 200);
   --ivory: oklch(0.97 0.02 85);
 
-  --gradient-gold: linear-gradient(135deg, oklch(0.88 0.12 88), oklch(0.7 0.14 70));
+  --gradient-gold: linear-gradient(135deg, #444444, #000000);
   --gradient-royal: linear-gradient(160deg, oklch(0.20 0.05 270 / 20%), oklch(0.12 0.04 270 / 60%));
   --gradient-hero: radial-gradient(circle at 70% 40%, oklch(0.78 0.13 80 / 15%), transparent 60%),
                    linear-gradient(160deg, oklch(0.20 0.05 270 / 10%), oklch(0.10 0.04 270 / 50%));
@@ -97,17 +97,17 @@
   html { scroll-behavior: smooth; }
   body {
     background-color: #050510;
-    background-image: url('/mob_bg.png');
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/mob_bg.png');
     background-size: 100% auto;
     background-repeat: repeat-y;
     background-position: top center;
-    color: var(--color-foreground);
+    color: white;
     font-family: var(--font-sans);
     overflow-x: hidden;
   }
   @media (min-width: 768px) {
     body {
-      background-image: url('/meow.png');
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/meow.png');
       background-size: cover;
     }
   }
@@ -132,15 +132,22 @@
   /* Remove text-shadow from inputs/controls where it looks odd */
   input, textarea, select, option {
     text-shadow: none;
+    color: white;
   }
 }
 
 @layer utilities {
   .text-gradient-gold {
-    color: var(--primary);
-    font-weight: 600;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
   }
-  .bg-gradient-gold { background: var(--gradient-gold); }
+  .bg-gradient-gold { 
+    background: var(--gradient-gold); 
+    color: white !important;
+  }
   .bg-gradient-royal { background: var(--gradient-royal); }
   .bg-gradient-hero { background: var(--gradient-hero); }
   .shadow-glow { box-shadow: var(--shadow-glow); }

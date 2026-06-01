@@ -46,6 +46,9 @@ export function EditPropertyModal({ property }: { property: any }) {
         price: (formData.get("price") as string) || "",
         type: (formData.get("type") as string) || "Flats",
         amenities: ((formData.get("amenities") as string) || "").split(",").map(a => a.trim()).filter(Boolean),
+        landmarks: ((formData.get("landmarks") as string) || "").split(",").map(a => a.trim()).filter(Boolean),
+        contactPhone: (formData.get("contactPhone") as string) || null,
+        contactWhatsapp: (formData.get("contactWhatsapp") as string) || null,
         dimensions: (formData.get("dimensions") as string) || "", 
         isFeatured: formData.get("isFeatured") === "on",
         images: uploadedUrls,
@@ -123,12 +126,28 @@ export function EditPropertyModal({ property }: { property: any }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="dimensions">Size / Dimensions (BHK)</Label>
+              <Label htmlFor="dimensions">Size / Dimensions (BHK & Area)</Label>
               <Input id="dimensions" name="dimensions" required defaultValue={property.dimensions} placeholder="e.g. 3 BHK or 26 Gunta" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="amenities">Amenities (comma-separated)</Label>
               <Input id="amenities" name="amenities" defaultValue={property.amenities?.join(", ")} placeholder="e.g. Garden, Security, Parking" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="landmarks">Landmarks (comma-separated)</Label>
+            <Input id="landmarks" name="landmarks" defaultValue={property.landmarks?.join(", ")} placeholder="e.g. Prem Mandir, NH-44" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="contactPhone">Contact Phone</Label>
+              <Input id="contactPhone" name="contactPhone" defaultValue={property.contactPhone || ""} placeholder="e.g. 9876543210" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contactWhatsapp">Contact WhatsApp</Label>
+              <Input id="contactWhatsapp" name="contactWhatsapp" defaultValue={property.contactWhatsapp || ""} placeholder="e.g. 9876543210" />
             </div>
           </div>
 

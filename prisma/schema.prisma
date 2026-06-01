@@ -20,12 +20,15 @@ model Property {
   location    String
   price       String
   type        String
-  amenities   String[]
-  dimensions  String
-  isFeatured  Boolean  @default(false)
-  isAvailable Boolean  @default(true)
-  images      String[]
-  gmapsUrl    String?
+  amenities       String[]
+  dimensions      String
+  landmarks       String[]
+  contactPhone    String?
+  contactWhatsapp String?
+  isFeatured      Boolean  @default(false)
+  isAvailable     Boolean  @default(true)
+  images          String[]
+  gmapsUrl        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

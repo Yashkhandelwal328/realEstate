@@ -7,6 +7,8 @@ import { AddPropertyModal } from "./AddPropertyModal";
 
 import { EditPropertyModal } from "./EditPropertyModal";
 
+import { PropertyActions } from "./PropertyActions";
+
 export default async function PropertiesAdmin() {
   const properties = await prisma.property.findMany({
     orderBy: { createdAt: "desc" },
@@ -19,7 +21,7 @@ export default async function PropertiesAdmin() {
           <h1 className="text-3xl font-display text-primary">Properties</h1>
           <p className="text-muted-foreground mt-1">Manage your real estate listings.</p>
         </div>
-        <AddPropertyModal />
+        <PropertyActions />
       </div>
 
       <div className="grid gap-4">

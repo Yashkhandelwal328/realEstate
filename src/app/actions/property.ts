@@ -13,6 +13,9 @@ export async function createProperty(data: {
   dimensions: string;
   isFeatured: boolean;
   images: string[];
+  landmarks?: string[];
+  contactPhone?: string | null;
+  contactWhatsapp?: string | null;
   gmapsUrl?: string | null;
 }) {
   const createData: Parameters<typeof prisma.property.create>[0]["data"] = {
@@ -25,6 +28,9 @@ export async function createProperty(data: {
     dimensions: data.dimensions,
     isFeatured: data.isFeatured,
     images: data.images,
+    ...(data.landmarks ? { landmarks: data.landmarks } : {}),
+    ...(data.contactPhone ? { contactPhone: data.contactPhone } : {}),
+    ...(data.contactWhatsapp ? { contactWhatsapp: data.contactWhatsapp } : {}),
     ...(data.gmapsUrl ? { gmapsUrl: data.gmapsUrl } : {}),
   };
 

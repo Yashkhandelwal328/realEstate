@@ -2,18 +2,6 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { writeFile, mkdir, readdir } from "fs/promises";
-import path from "path";
-
-const PROPERTIES_DIR = path.join(process.cwd(), "public", "properties");
-
-async function ensureDir() {
-  try {
-    await readdir(PROPERTIES_DIR);
-  } catch {
-    await mkdir(PROPERTIES_DIR, { recursive: true });
-  }
-}
 
 export async function createProperty(data: {
   title: string;
@@ -66,17 +54,23 @@ export async function deleteProperty(id: string) {
 
 export async function uploadPropertyImages(formData: FormData) {
   try {
-    await ensureDir();
     const files = formData.getAll("images") as File[];
     const urls: string[] = [];
 
     for (const file of files) {
       if (!file || !(file instanceof File)) continue;
       const buffer = Buffer.from(await file.arrayBuffer());
-      const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "")}`;
-      const filepath = path.join(PROPERTIES_DIR, filename);
-      await writeFile(filepath, buffer);
-      urls.push(`/properties/${filename}`);
+      const base64Data = buffer.toString("base64");
+      
+      const imageRecord = await prisma.image.create({
+        data: {
+          data: base64Data,
+          mimeType: file.type || "image/jpeg",
+          category: "property",
+        }
+      });
+      
+      urls.push(`/api/images/${imageRecord.id}`);
     }
 
     return { success: true, urls };

@@ -228,8 +228,18 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
             <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Location & Metrics</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input id="location" name="location" defaultValue={initialData?.location || "Vrindavan"} required />
+                <Label htmlFor="location">Location (City Category)</Label>
+                <Select name="location" required defaultValue={initialData?.location || "Vrindavan"}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Vrindavan">Vrindavan</SelectItem>
+                    <SelectItem value="Mathura">Mathura</SelectItem>
+                    <SelectItem value="Barsana">Barsana</SelectItem>
+                    <SelectItem value="Govardhan">Govardhan</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>

@@ -127,8 +127,18 @@ export function EditPropertyModal({ property }: { property: any }) {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input id="location" name="location" defaultValue={property.location} required />
+                <Label htmlFor="location">Location (City Category)</Label>
+                <Select name="location" required defaultValue={property.location || "Vrindavan"}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Vrindavan">Vrindavan</SelectItem>
+                    <SelectItem value="Mathura">Mathura</SelectItem>
+                    <SelectItem value="Barsana">Barsana</SelectItem>
+                    <SelectItem value="Govardhan">Govardhan</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>

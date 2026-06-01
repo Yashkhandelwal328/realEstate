@@ -2,6 +2,7 @@ import Link from "next/link";
 
 interface Property {
   id: string;
+  slug?: string | null;
   title: string;
   description: string;
   location: string;
@@ -16,9 +17,11 @@ export function PropertyCard({ property }: { property: Property }) {
     ? property.images[0] 
     : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' fill='%230F0F1E'%3E%3Crect width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-size='24' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E";
 
+  const propertyLink = `/property/${property.slug || property.id}`;
+
   return (
     <div className="glass rounded-3xl border border-primary/10 p-6 shadow-elegant flex flex-col h-full hover:border-primary/40 transition-colors group">
-      <Link href={`/property/${property.id}`} className="block overflow-hidden rounded-t-2xl -mx-2 -mt-2 md:-mx-4 md:-mt-4 mb-4">
+      <Link href={propertyLink} className="block overflow-hidden rounded-t-2xl -mx-2 -mt-2 md:-mx-4 md:-mt-4 mb-4 group">
         <img 
           src={image} 
           alt={property.title} 
@@ -31,7 +34,7 @@ export function PropertyCard({ property }: { property: Property }) {
         <span>{property.type}</span>
       </div>
       
-      <Link href={`/property/${property.id}`}>
+      <Link href={propertyLink}>
         <h4 className="mt-4 font-display text-2xl text-foreground group-hover:text-primary transition-colors line-clamp-1">
           {property.title}
         </h4>
@@ -47,7 +50,7 @@ export function PropertyCard({ property }: { property: Property }) {
 
       <div className="mt-6 flex flex-wrap gap-2">
         <Link 
-          href={`/property/${property.id}`}
+          href={propertyLink}
           className="flex-1 text-center rounded-full bg-primary/10 border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/20"
         >
           View Details

@@ -10,10 +10,10 @@ import { PropertyPageClient } from "./PropertyPageClient";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const property = await prisma.property.findUnique({ where: { id } });
+  const { slug } = await params;
+  const property = await prisma.property.findUnique({ where: { slug } });
 
   if (!property) {
     return { title: "Property Not Found — Khandelwal Real Estate" };
@@ -34,12 +34,12 @@ export async function generateMetadata({
 export default async function PropertyPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
 
   const property = await prisma.property.findUnique({
-    where: { id },
+    where: { slug },
   });
 
   if (!property) {

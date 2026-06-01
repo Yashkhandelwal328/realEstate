@@ -33,7 +33,7 @@ export function About() {
         >
           <p className="font-label text-xs text-primary">About Us</p>
           <h2 className="mt-3 font-display text-4xl md:text-5xl text-foreground">
-            Rooted in <span className="text-gradient-gold">Devotion</span>, Built on Trust
+            Rooted in <span className="text-primary font-semibold">Devotion</span>, Built on Trust
           </h2>
           <SanskritDivider />
           <p className="text-foreground/90 leading-relaxed">
@@ -46,7 +46,7 @@ export function About() {
           <div className="mt-8 grid grid-cols-3 gap-4">
             {stats.map((s) => (
               <div key={s.v} className="glass rounded-xl p-5 text-center">
-                <div className="font-display text-3xl text-gradient-gold">{s.k}</div>
+                <div className="font-display text-3xl text-primary">{s.k}</div>
                 <div className="font-label text-[10px] text-foreground/70 mt-1">{s.v}</div>
               </div>
             ))}

@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/properties", label: "Properties", icon: Home },
-  { href: "/admin/content", label: "Content", icon: FileText },
+  { href: "/admin/content", label: "Posters and stuff", icon: FileText },
   { href: "/admin/inquiries", label: "Inquiries", icon: MessageSquare },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#050510] relative z-50 flex flex-col md:flex-row">
       <aside className="w-full md:w-64 bg-card border-r border-border p-6 flex flex-col gap-6">
         <div className="font-display text-2xl text-primary">KRE Admin</div>
         <nav className="flex flex-col gap-2 flex-1">

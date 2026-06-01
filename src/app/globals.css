@@ -51,9 +51,9 @@
   --popover: oklch(0.18 0.04 270 / 40%);
   --popover-foreground: oklch(0.96 0.02 85);
 
-  /* Antique gold */
-  --primary: oklch(0.78 0.13 80);
-  --primary-foreground: oklch(0.16 0.04 270);
+  /* Deep Maroon - high contrast against the bright sunset */
+  --primary: oklch(0.38 0.13 25);
+  --primary-foreground: oklch(0.97 0.02 85);
 
   /* Deep maroon */
   --secondary: oklch(0.38 0.13 25);
@@ -111,17 +111,34 @@
       background-size: cover;
     }
   }
-  h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
-  .font-display { font-family: var(--font-display); }
-  .font-label { font-family: var(--font-label); letter-spacing: 0.18em; text-transform: uppercase; }
+  h1,h2,h3,h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .font-display {
+    font-family: var(--font-display);
+    text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .font-label {
+    font-family: var(--font-label);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  }
+  p, span, a, button, label, li, td, th, div {
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5), 0 0px 2px rgba(0,0,0,0.3);
+  }
+  /* Remove text-shadow from inputs/controls where it looks odd */
+  input, textarea, select, option {
+    text-shadow: none;
+  }
 }
 
 @layer utilities {
   .text-gradient-gold {
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--primary);
+    font-weight: 600;
   }
   .bg-gradient-gold { background: var(--gradient-gold); }
   .bg-gradient-royal { background: var(--gradient-royal); }

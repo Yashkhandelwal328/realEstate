@@ -25,18 +25,12 @@ export function Hero() {
           variants={{ show: { transition: { staggerChildren: 0.12 } }, hidden: {} }}
           className="relative z-10"
         >
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-6"
-          >
-            <span className="size-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-label text-xs text-primary">Vrindavan · Mathura · Braj</span>
-          </motion.div>
+
           <motion.h1
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
             className="font-display text-5xl md:text-7xl leading-[1.05] text-foreground"
           >
-            Find Your <span className="text-gradient-gold italic">Dream Property</span> in the Sacred Land of Braj
+            Find Your <span className="text-primary italic font-semibold">Dream Property</span> in the Sacred Land of Braj
           </motion.h1>
           <motion.p
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}

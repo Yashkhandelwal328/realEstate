@@ -2,36 +2,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import v0 from "@/assets/vrindavan/v0.png";
-import vp1 from "@/assets/vrindavan/vp1.png";
-import vp2 from "@/assets/vrindavan/vp2.png";
-import vp3 from "@/assets/vrindavan/vp3.png";
-import vp4 from "@/assets/vrindavan/vp4.png";
-import vp5 from "@/assets/vrindavan/vp5.png";
-import v5 from "@/assets/vrindavan/v5.jpg";
-import v6 from "@/assets/vrindavan/v6.jpg";
-import k2 from "@/assets/krishna/k2.jpg";
-import k4 from "@/assets/krishna/k4.png";
-import k5 from "@/assets/krishna/k5.png";
-
-// In Next.js, static imports resolve to StaticImageData objects ({ src, width, height }).
-// We extract the .src string for use in <img> tags.
-const getSrc = (img: { src: string } | string): string =>
-  typeof img === "string" ? img : img.src;
-
-const images = [
-  { src: getSrc(v0), alt: "Vrindavan view" },
-  { src: getSrc(vp1), alt: "Vrindavan architecture" },
-  { src: getSrc(k2), alt: "Krishna devotional art" },
-  { src: getSrc(vp2), alt: "Vrindavan ghats" },
-  { src: getSrc(v5), alt: "Vrindavan street" },
-  { src: getSrc(vp3), alt: "Vrindavan temple" },
-  { src: getSrc(k4), alt: "Krishna painting" },
-  { src: getSrc(vp4), alt: "Vrindavan sunset" },
-  { src: getSrc(v6), alt: "Vrindavan heritage" },
-  { src: getSrc(vp5), alt: "Vrindavan landscape" },
-  { src: getSrc(k5), alt: "Krishna divine art" },
-];
+const images = Array.from({ length: 7 }, (_, i) => ({
+  src: `/posters/${i + 1}.jpeg`,
+  alt: `Poster ${i + 1}`,
+}));
 
 export function Gallery() {
   const [open, setOpen] = useState<string | null>(null);
@@ -40,9 +14,9 @@ export function Gallery() {
     <section id="gallery" className="relative py-28 bg-gradient-royal">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="font-label text-xs text-primary">Glimpses of Braj</p>
+          <p className="font-label text-xs text-primary">Gallery</p>
           <h2 className="mt-3 font-display text-4xl md:text-5xl">
-            A <span className="text-gradient-gold">Visual</span> Pilgrimage
+            <span className="text-gradient-gold">Posters</span> and stuff
           </h2>
         </div>
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">

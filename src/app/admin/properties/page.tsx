@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { deleteProperty } from "@/app/actions/property";
 import { AddPropertyModal } from "./AddPropertyModal";
 
+import { EditPropertyModal } from "./EditPropertyModal";
+
 export default async function PropertiesAdmin() {
   const properties = await prisma.property.findMany({
     orderBy: { createdAt: "desc" },
@@ -32,9 +34,7 @@ export default async function PropertiesAdmin() {
                   <p className="text-sm text-muted-foreground">{p.location} • {p.price}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Edit className="size-4" />
-                  </Button>
+                  <EditPropertyModal property={p} />
                   <form action={async () => {
                     "use server";
                     await deleteProperty(p.id);

@@ -1,7 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import _vrindavan from "@/assets/vrindavan/v2.jpg";
 import _mathura from "@/assets/mathura.jpg";
 import _barsana from "@/assets/barsana.jpg";
@@ -22,6 +24,112 @@ const locations = [
   { name: "Barsana", img: barsana, tag: "Abode of Shri Radha" },
   { name: "Govardhan", img: goverdhan, tag: "The Sacred Hill" },
 ];
+
+/* ─── Property Carousel ─── */
+function PropertyCarousel({ options }: { options: any[] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "center" },
+    [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi, onSelect]);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  return (
+    <div className="relative">
+      {/* Carousel viewport */}
+      <div ref={emblaRef} className="overflow-hidden rounded-3xl">
+        <div className="flex">
+          {options.map((option) => (
+            <div key={option.id} className="min-w-0 shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/3 px-3">
+              <div className="glass rounded-3xl border border-primary/10 p-6 md:p-8 shadow-elegant flex flex-col h-full">
+                {option.images && option.images.length > 0 && (
+                  <div className="mb-4 -mx-2 -mt-2 md:-mx-4 md:-mt-4 overflow-hidden rounded-t-2xl">
+                    <img src={option.images[0]} alt={option.title} className="w-full h-48 object-cover" />
+                  </div>
+                )}
+                <div className="font-label text-xs text-primary uppercase tracking-[0.3em] flex justify-between items-center">
+                  <span>{option.dimensions}</span>
+                  <span>{option.type}</span>
+                </div>
+                <h4 className="mt-4 font-display text-2xl text-foreground">{option.title}</h4>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed flex-grow">{option.description}</p>
+                <div className="mt-4 text-lg font-semibold text-primary">{option.price}</div>
+
+                {option.gmapsUrl && (
+                  <div className="mt-4">
+                    <iframe
+                      src={option.gmapsUrl}
+                      width="100%"
+                      height="150"
+                      style={{ border: 0, borderRadius: '8px' }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => (window.location.hash = "#contact")}
+                  className="mt-6 inline-flex justify-center rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                >
+                  Contact Us
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Arrow buttons – visible on desktop */}
+      <button
+        type="button"
+        onClick={scrollPrev}
+        className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-10 size-10 items-center justify-center rounded-full border border-primary/30 bg-background/80 text-primary backdrop-blur transition hover:bg-primary/20"
+      >
+        <ArrowLeft className="size-4" />
+      </button>
+      <button
+        type="button"
+        onClick={scrollNext}
+        className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-10 size-10 items-center justify-center rounded-full border border-primary/30 bg-background/80 text-primary backdrop-blur transition hover:bg-primary/20"
+      >
+        <ArrowRight className="size-4" />
+      </button>
+
+      {/* Dot indicators */}
+      <div className="flex justify-center gap-2 mt-6">
+        {options.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => emblaApi?.scrollTo(i)}
+            className={`size-2.5 rounded-full transition-all duration-300 ${
+              i === selectedIndex
+                ? "bg-primary w-6 rounded-full"
+                : "bg-primary/30 hover:bg-primary/50"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function Locations({ properties = [] }: { properties?: any[] }) {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
@@ -116,63 +224,17 @@ export function Locations({ properties = [] }: { properties?: any[] }) {
                 </div>
                 <h3 className="mt-4 font-display text-3xl md:text-4xl text-foreground">Properties in {selectedLocation}</h3>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                  These are the recommended options for your chosen location.
+                  Swipe or use arrows to browse available properties.
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentOptions.length === 0 ? (
-                  <div className="col-span-full text-center py-12 text-muted-foreground">
-                    No properties available in this location currently.
-                  </div>
-                ) : (
-                  currentOptions.map((option, i) => (
-                    <motion.div
-                      key={option.id}
-                      initial={{ opacity: 0, y: 40 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: i * 0.08 }}
-                      className="group glass rounded-3xl border border-primary/10 p-8 shadow-elegant transition hover:-translate-y-2 flex flex-col"
-                    >
-                      {option.images && option.images.length > 0 && (
-                        <div className="mb-4 -mx-4 -mt-4 overflow-hidden rounded-t-2xl">
-                          <img src={option.images[0]} alt={option.title} className="w-full h-48 object-cover" />
-                        </div>
-                      )}
-                      <div className="font-label text-xs text-primary uppercase tracking-[0.3em] flex justify-between items-center">
-                        <span>{option.dimensions}</span>
-                        <span>{option.type}</span>
-                      </div>
-                      <h4 className="mt-4 font-display text-2xl text-foreground">{option.title}</h4>
-                      <p className="mt-3 text-sm text-muted-foreground leading-relaxed flex-grow">{option.description}</p>
-                      <div className="mt-4 text-lg font-semibold text-primary">{option.price}</div>
-                      
-                      {option.gmapsUrl && (
-                        <div className="mt-4">
-                          <iframe
-                            src={option.gmapsUrl}
-                            width="100%"
-                            height="150"
-                            style={{ border: 0, borderRadius: '8px' }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                          ></iframe>
-                        </div>
-                      )}
-                      
-                      <button
-                        type="button"
-                        onClick={() => window.location.hash = "#contact"}
-                        className="mt-6 inline-flex justify-center rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-                      >
-                        Contact Us
-                      </button>
-                    </motion.div>
-                  ))
-                )}
-              </div>
+              {currentOptions.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  No properties available in this location currently.
+                </div>
+              ) : (
+                <PropertyCarousel options={currentOptions} />
+              )}
             </motion.div>
           )}
         </AnimatePresence>

@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createProperty, uploadPropertyImages } from "@/app/actions/property";
+import imageCompression from "browser-image-compression";
 
 export function AddPropertyModal() {
   const [open, setOpen] = useState(false);
@@ -32,7 +33,21 @@ export function AddPropertyModal() {
       const imageFiles = formData.getAll("images") as File[];
       if (imageFiles.length > 0 && imageFiles[0].size > 0) {
         const uploadData = new FormData();
-        imageFiles.forEach(f => uploadData.append("images", f));
+        
+        for (const f of imageFiles) {
+          try {
+            const compressedFile = await imageCompression(f, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+            });
+            uploadData.append("images", compressedFile, f.name);
+          } catch (error) {
+            console.error("Compression error:", error);
+            uploadData.append("images", f);
+          }
+        }
+        
         const res = await uploadPropertyImages(uploadData);
         if (res.success && res.urls) {
           uploadedUrls = res.urls;

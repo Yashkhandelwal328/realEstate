@@ -41,7 +41,7 @@ export function PostersClient({ initialPosters }: { initialPosters: string[] }) 
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center bg-card border border-primary/20 rounded-xl p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-card border border-primary/20 rounded-xl p-6 gap-4">
         <div>
           <h2 className="text-xl font-display text-primary">Upload New Poster</h2>
           <p className="text-sm text-muted-foreground mt-1">Add a new image to the Gallery section on the home page.</p>

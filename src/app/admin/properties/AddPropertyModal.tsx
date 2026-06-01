@@ -90,7 +90,7 @@ export function AddPropertyModal() {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input id="title" name="title" required placeholder="e.g. Sacred 3 BHK" />
@@ -106,7 +106,7 @@ export function AddPropertyModal() {
             <Textarea id="description" name="description" required placeholder="Property details..." />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <Select name="location" required defaultValue="Vrindavan">
@@ -137,7 +137,7 @@ export function AddPropertyModal() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="dimensions">Size / Dimensions (BHK)</Label>
               <Input id="dimensions" name="dimensions" required placeholder="e.g. 3 BHK or 26 Gunta" />

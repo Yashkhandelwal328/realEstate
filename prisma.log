@@ -1,0 +1,41 @@
+Loaded Prisma config from prisma.config.ts.
+
+[36m⠋[39m  Starting _prisma dev_ server default...
+
+
+
+
+
+
+
+ ERROR  No such built-in module: node:sqlite
+
+    at Module._load (node:internal/modules/cjs/loader:1031:13)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at buildOpenImpl (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1199:28)
+    at openSqliteDatabase (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1205:16)
+    at new SqliteDurableStore (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1232:15)
+    at createAppCore (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:15190:14)
+    at createLocalApp (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:20611:10)
+    at startLocalDurableStreamsServer (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:21180:11)
+    at async Q (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/dev/dist/chunk-UAYMGXE6.js:1:3722)
+
+
+ ERROR  No such built-in module: node:sqlite
+
+    at Module._load (node:internal/modules/cjs/loader:1031:13)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at buildOpenImpl (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1199:28)
+    at openSqliteDatabase (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1205:16)
+    at new SqliteDurableStore (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:1232:15)
+    at createAppCore (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:15190:14)
+    at createLocalApp (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:20611:10)
+    at startLocalDurableStreamsServer (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/streams-local/dist/local/index-bqgdzwz6.js:21180:11)
+    at async Q (/tmp/@prisma/cli-dev@latest-1780252200000/node_modules/@prisma/dev/dist/chunk-UAYMGXE6.js:1:3722) 
+
+
+
+ ERROR  No such built-in module: node:sqlite
+

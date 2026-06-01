@@ -9,13 +9,20 @@ import { Gallery } from "@/components/sections/Gallery";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 
-export default function Home() {
+import prisma from "@/lib/db";
+
+export default async function Home() {
+  const properties = await prisma.property.findMany({
+    where: { isAvailable: true },
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
     <main className="overflow-x-hidden">
       <Nav />
       <Hero />
       <About />
-      <Locations />
+      <Locations properties={properties} />
       <WhyUs />
       <Partners />
       <Testimonials />

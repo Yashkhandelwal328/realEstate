@@ -13,9 +13,23 @@ export async function createProperty(data: {
   dimensions: string;
   isFeatured: boolean;
   images: string[];
+  gmapsUrl?: string | null;
 }) {
+  const createData: Parameters<typeof prisma.property.create>[0]["data"] = {
+    title: data.title,
+    description: data.description,
+    location: data.location,
+    price: data.price,
+    type: data.type,
+    amenities: data.amenities,
+    dimensions: data.dimensions,
+    isFeatured: data.isFeatured,
+    images: data.images,
+    ...(data.gmapsUrl ? { gmapsUrl: data.gmapsUrl } : {}),
+  };
+
   const property = await prisma.property.create({
-    data,
+    data: createData,
   });
   revalidatePath("/admin/properties");
   revalidatePath("/");

@@ -8,7 +8,7 @@ export function Footer() {
       <div className="container mx-auto px-4 grid md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-3">
-            <img src={logo} alt="Khandelwal Real Estate" className="size-12 rounded-full ring-1 ring-primary/50 object-cover" />
+            <img src={(logo as any).src || logo} alt="Khandelwal Real Estate" className="size-12 rounded-full ring-1 ring-primary/50 object-cover" />
             <div>
               <div className="font-display text-xl">Khandelwal</div>
               <div className="font-label text-[10px] text-primary -mt-0.5">Real Estate</div>

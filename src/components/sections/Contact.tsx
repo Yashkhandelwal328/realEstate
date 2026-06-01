@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const PHONE = "+91 96390 14150";
 const PHONE_DIGITS = "919639014150";
-const EMAIL = "Shailendrakhandelwal82@gmail.com";
+const EMAIL = "Khandelwalrealestate980@gmail.com";
 const ADDRESS = "Anand Dham Near Income Tax Office N.H-19 Mathura";
 
 export function Contact() {

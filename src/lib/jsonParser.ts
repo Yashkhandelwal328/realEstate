@@ -87,8 +87,9 @@ export function parsePropertyJson(jsonString: string): ParseResult {
       ? data.slug.trim() 
       : generateSlug(title);
 
-    const price = typeof data.price === "string" ? data.price.trim() : "";
-    if (!price) missingFields.push("price");
+    const price = typeof data.price === "string" && data.price.trim() !== "" 
+      ? data.price.trim() 
+      : "Ask for Price";
 
     const location = typeof data.location === "string" ? data.location.trim() : "";
     if (!location) missingFields.push("location");

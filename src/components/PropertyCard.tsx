@@ -52,13 +52,12 @@ export function PropertyCard({ property }: { property: Property }) {
         >
           View Details
         </Link>
-        <button
-          type="button"
-          onClick={() => (window.location.hash = "#contact")}
+        <Link
+          href="/#contact"
           className="flex-1 text-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
         >
           Contact Us
-        </button>
+        </Link>
       </div>
     </div>
   );

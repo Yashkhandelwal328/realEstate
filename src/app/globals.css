@@ -99,7 +99,7 @@
     background-color: #050510;
     background-image: url('/mob_bg.png');
     background-size: 100% auto;
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-position: top center;
     color: var(--color-foreground);
     font-family: var(--font-sans);

@@ -32,18 +32,27 @@ export function EditPropertyModal({ property }: { property: any }) {
       const imageFiles = formData.getAll("images") as File[];
       
       if (imageFiles.length > 0 && imageFiles[0].size > 0) {
-        const uploadData = new FormData();
         for (const f of imageFiles) {
+          let fileToUpload: File | Blob = f;
           try {
-            const compressed = await imageCompression(f, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
-            uploadData.append("images", compressed, f.name);
+            fileToUpload = await imageCompression(f, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
           } catch (error) {
-            uploadData.append("images", f);
+            console.error("Compression failed", error);
           }
-        }
-        const res = await uploadPropertyImages(uploadData);
-        if (res.success && res.urls) {
-          finalImageUrls = res.urls; // Replace images if new ones uploaded
+          
+          const singleFormData = new FormData();
+          singleFormData.append("images", fileToUpload, f.name);
+          
+          const res = await uploadPropertyImages(singleFormData);
+          if (res.success && res.urls) {
+            // Because edit replaces images, we should reset finalImageUrls on the first successful upload
+            // Wait, currently it replaces ALL images if NEW ones are uploaded.
+            // Let's do it safely: if this is the first image uploaded in this batch, clear the old ones.
+            if (finalImageUrls === property.images) {
+              finalImageUrls = [];
+            }
+            finalImageUrls.push(...res.urls);
+          }
         }
       }
 

@@ -53,86 +53,45 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
     const formData = new FormData(e.currentTarget);
     
     try {
-      const uploadData = new FormData();
-      let hasUploads = false;
-
-      // Process Gallery Images
+      let finalImageUrls = [...importedImages];
+      
       const imageFiles = formData.getAll("images") as File[];
       for (const f of imageFiles) {
         if (f.size > 0) {
+          let fileToUpload: File | Blob = f;
           try {
-            const compressed = await imageCompression(f, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
-            uploadData.append("images", compressed, f.name);
-            hasUploads = true;
+            fileToUpload = await imageCompression(f, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
           } catch (e) {
-            uploadData.append("images", f);
-            hasUploads = true;
+            console.error("Compression failed", e);
           }
-        }
-      }
-
-      // Process Lifestyle Images
-      for (let i = 0; i < lifestyleSections.length; i++) {
-        const lfFile = formData.get(`lifestyle-image-${i}`) as File;
-        if (lfFile && lfFile.size > 0) {
-          try {
-            const compressed = await imageCompression(lfFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
-            uploadData.append(`lifestyle-${i}`, compressed, lfFile.name);
-            hasUploads = true;
-          } catch (e) {
-            uploadData.append(`lifestyle-${i}`, lfFile);
-            hasUploads = true;
+          
+          const singleFormData = new FormData();
+          singleFormData.append("images", fileToUpload, f.name);
+          
+          const galRes = await uploadPropertyImages(singleFormData);
+          if (galRes.success && galRes.urls) {
+             finalImageUrls.push(...galRes.urls);
           }
-        }
-      }
-
-      let newGalleryUrls: string[] = [];
-      let mappedLifestyleUrls: Record<string, string> = {};
-
-      if (hasUploads) {
-        const res = await uploadFiles(uploadData);
-        if (res.success && res.urls) {
-          // Separate gallery images from lifestyle images
-          // The uploadFiles action processes everything and returns a map.
-          // Wait, uploadPropertyImages returns an array. uploadFiles returns a map!
-          // We changed uploadFiles to handle named keys. If key is "images", it overwrites?
-          // Let's use uploadPropertyImages for gallery and uploadFiles for lifestyle.
-          // Actually, our uploadFiles action in property.ts loops over entries and maps key -> url.
-          // But FormData can have multiple 'images' keys. Object.fromEntries / map doesn't support multiple keys well in my returned result.
-          // Let's just upload them in two separate batches for safety.
-        }
-      }
-
-      // Let's do it safely:
-      let finalImageUrls = [...importedImages];
-      
-      if (imageFiles.length > 0 && imageFiles[0].size > 0) {
-        const galleryData = new FormData();
-        imageFiles.forEach(f => galleryData.append("images", f));
-        const galRes = await uploadPropertyImages(galleryData);
-        if (galRes.success && galRes.urls) {
-          finalImageUrls = [...finalImageUrls, ...galRes.urls];
         }
       }
 
       const updatedLifestyleSections = [...lifestyleSections];
-      const lfUploadData = new FormData();
-      let hasLfUploads = false;
       for (let i = 0; i < lifestyleSections.length; i++) {
-        const f = formData.get(`lifestyle-image-${i}`) as File;
-        if (f && f.size > 0) {
-          lfUploadData.append(`lifestyle-${i}`, f);
-          hasLfUploads = true;
-        }
-      }
-
-      if (hasLfUploads) {
-        const lfRes = await uploadFiles(lfUploadData);
-        if (lfRes.success && lfRes.urls) {
-          for (let i = 0; i < lifestyleSections.length; i++) {
-            if (lfRes.urls[`lifestyle-${i}`]) {
-              updatedLifestyleSections[i].image = lfRes.urls[`lifestyle-${i}`];
-            }
+        const lfFile = formData.get(`lifestyle-image-${i}`) as File;
+        if (lfFile && lfFile.size > 0) {
+          let fileToUpload: File | Blob = lfFile;
+          try {
+            fileToUpload = await imageCompression(lfFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+          } catch (e) {
+            console.error("Compression failed", e);
+          }
+          
+          const singleLfData = new FormData();
+          singleLfData.append(`lifestyle-${i}`, fileToUpload, lfFile.name);
+          
+          const lfRes = await uploadFiles(singleLfData);
+          if (lfRes.success && lfRes.urls && lfRes.urls[`lifestyle-${i}`]) {
+            updatedLifestyleSections[i].image = lfRes.urls[`lifestyle-${i}`];
           }
         }
       }

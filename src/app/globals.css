@@ -138,11 +138,8 @@
 
 @layer utilities {
   .text-gradient-gold {
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+    color: #FFFFFF;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
   }
   .bg-gradient-gold { 
     background: var(--gradient-gold); 

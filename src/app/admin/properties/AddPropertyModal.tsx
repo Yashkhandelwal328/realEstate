@@ -113,6 +113,27 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
         }
       }
 
+      const updatedFloorPlans = [...floorPlans];
+      for (let i = 0; i < floorPlans.length; i++) {
+        const fpFile = formData.get(`floorplan-image-${i}`) as File;
+        if (fpFile && fpFile.size > 0) {
+          let fileToUpload: File | Blob = fpFile;
+          try {
+            fileToUpload = await imageCompression(fpFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+          } catch (e) {
+            console.error("Compression failed", e);
+          }
+          
+          const singleFpData = new FormData();
+          singleFpData.append(`floorplan-${i}`, fileToUpload, fpFile.name);
+          
+          const fpRes = await uploadFiles(singleFpData);
+          if (fpRes.success && fpRes.urls && fpRes.urls[`floorplan-${i}`]) {
+            updatedFloorPlans[i].image = fpRes.urls[`floorplan-${i}`];
+          }
+        }
+      }
+
       // 2. Create property
       await createProperty({
         title: (formData.get("title") as string) || "",
@@ -135,7 +156,7 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
         images: finalImageUrls,
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
         lifestyleSections: updatedLifestyleSections,
-        floorPlans: floorPlans, // For now, we'll just pass the parsed JSON for floor plans directly
+        floorPlans: updatedFloorPlans,
         rawImportedJson: initialData?.rawImportedJson || null,
       });
       setOpen(false);
@@ -278,6 +299,30 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
                       </Label>
                       <Input id={`lifestyle-image-${idx}`} name={`lifestyle-image-${idx}`} type="file" accept="image/*" />
                       {sec.image && <p className="text-xs text-green-600">✓ Image configured from JSON</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Section: Floor Plans */}
+          {floorPlans.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Floor Plans</h3>
+              <p className="text-xs text-muted-foreground">Upload images for the parsed floor plans.</p>
+              
+              <div className="grid gap-6 md:grid-cols-2">
+                {floorPlans.map((fp, idx) => (
+                  <div key={idx} className="bg-muted/30 p-4 rounded-xl border border-primary/10">
+                    <h4 className="font-semibold">{fp.title}</h4>
+                    <p className="text-sm text-primary font-medium mt-1 mb-3">{fp.area}</p>
+                    <div className="space-y-2">
+                      <Label htmlFor={`floorplan-image-${idx}`} className="flex items-center gap-2">
+                        <ImageIcon className="size-4" /> Upload Plan Image
+                      </Label>
+                      <Input id={`floorplan-image-${idx}`} name={`floorplan-image-${idx}`} type="file" accept="image/*" />
+                      {fp.image && <p className="text-xs text-green-600">✓ Image configured from JSON</p>}
                     </div>
                   </div>
                 ))}

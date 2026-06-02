@@ -105,7 +105,7 @@ export function PropertyPageClient({ property }: { property: any }) {
           <div className="absolute top-6 left-4 z-10">
             <Link
               href="/#locations"
-              className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-foreground hover:text-primary transition-colors"
+              className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-4 py-2 text-sm text-white shadow-lg hover:bg-white/30 transition-colors"
             >
               <ArrowLeft className="size-4" />
               Back

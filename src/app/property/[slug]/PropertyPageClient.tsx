@@ -185,6 +185,25 @@ export function PropertyPageClient({ property }: { property: any }) {
               <div className="prose prose-invert prose-p:text-muted-foreground prose-p:leading-relaxed max-w-none">
                 <p className="whitespace-pre-line text-lg">{property.description}</p>
               </div>
+              
+              {property.overviewImage && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-8 rounded-2xl overflow-hidden border border-primary/10 shadow-xl"
+                >
+                  <img 
+                    src={property.overviewImage} 
+                    alt="Property Overview" 
+                    className="w-full h-auto object-cover max-h-[500px]"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Quick Info Card */}

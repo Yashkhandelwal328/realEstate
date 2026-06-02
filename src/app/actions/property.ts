@@ -27,6 +27,7 @@ export async function createProperty(data: {
   floorPlans?: any;
   lifestyleSections?: any;
   rawImportedJson?: any;
+  overviewImage?: string | null;
 }) {
   const createData: Parameters<typeof prisma.property.create>[0]["data"] = {
     title: data.title,
@@ -52,6 +53,7 @@ export async function createProperty(data: {
     ...(data.floorPlans ? { floorPlans: data.floorPlans } : {}),
     ...(data.lifestyleSections ? { lifestyleSections: data.lifestyleSections } : {}),
     ...(data.rawImportedJson ? { rawImportedJson: data.rawImportedJson } : {}),
+    ...(data.overviewImage ? { overviewImage: data.overviewImage } : {}),
   };
 
   const property = await prisma.property.create({

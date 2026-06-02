@@ -47,6 +47,7 @@ export interface ParsedPropertyJson {
   floorPlans: FloorPlan[];
   builderInfo: BuilderInfo | null;
   rawImportedJson?: any;
+  overviewImage?: string | null;
 }
 
 export interface ParseResult {

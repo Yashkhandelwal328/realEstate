@@ -72,6 +72,23 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
         }
       }
       
+      let finalOverviewImage = initialData?.overviewImage || null;
+      const overviewImageFile = formData.get("overviewImage") as File;
+      if (overviewImageFile && overviewImageFile.size > 0) {
+        let fileToUpload: File | Blob = overviewImageFile;
+        try {
+          fileToUpload = await imageCompression(overviewImageFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+        } catch (e) {
+          console.error("Compression failed", e);
+        }
+        const singleFormData = new FormData();
+        singleFormData.append("images", fileToUpload, overviewImageFile.name);
+        const ovRes = await uploadPropertyImages(singleFormData);
+        if (ovRes.success && ovRes.urls && ovRes.urls.length > 0) {
+          finalOverviewImage = ovRes.urls[0];
+        }
+      }
+
       const imageFiles = formData.getAll("images") as File[];
       for (const f of imageFiles) {
         if (f.size > 0) {
@@ -157,6 +174,7 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
         lifestyleSections: updatedLifestyleSections,
         floorPlans: updatedFloorPlans,
+        overviewImage: finalOverviewImage,
         rawImportedJson: initialData?.rawImportedJson || null,
       });
       setOpen(false);
@@ -214,10 +232,26 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
               </div>
             </div>
 
+          {/* Section: Overview */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Overview</h3>
             <div className="space-y-2">
-              <Label htmlFor="description">Full Description</Label>
-              <Textarea id="description" name="description" defaultValue={initialData?.description} required className="min-h-[100px]" />
+              <Label htmlFor="description">Description</Label>
+              <Textarea 
+                id="description" 
+                name="description" 
+                defaultValue={initialData?.description} 
+                className="min-h-[120px] resize-y" 
+                required 
+              />
             </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="overviewImage">Overview Image (Optional)</Label>
+              <p className="text-xs text-muted-foreground mb-2">Upload a single image to appear directly beneath the Overview text.</p>
+              <Input id="overviewImage" name="overviewImage" type="file" accept="image/*" />
+            </div>
+          </div>
           </div>
 
           {/* Section: Location Data */}

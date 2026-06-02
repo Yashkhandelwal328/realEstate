@@ -41,6 +41,7 @@ model Property {
   floorPlans        Json?
   lifestyleSections Json?
   rawImportedJson   Json?
+  overviewImage     String?
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

@@ -54,6 +54,25 @@ export function EditPropertyModal({ property }: { property: any }) {
         }
       }
 
+      let finalOverviewImage = property.overviewImage || null;
+      const overviewImageFile = formData.get("overviewImage") as File;
+      if (overviewImageFile && overviewImageFile.size > 0) {
+        let fileToUpload: File | Blob = overviewImageFile;
+        try {
+          fileToUpload = await imageCompression(overviewImageFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+        } catch (error) {
+          console.error("Compression failed", error);
+        }
+        
+        const singleFormData = new FormData();
+        singleFormData.append("images", fileToUpload, overviewImageFile.name);
+        
+        const ovRes = await uploadPropertyImages(singleFormData);
+        if (ovRes.success && ovRes.urls && ovRes.urls.length > 0) {
+           finalOverviewImage = ovRes.urls[0];
+        }
+      }
+
       const imageFiles = formData.getAll("images") as File[];
       
       if (imageFiles.length > 0 && imageFiles[0].size > 0) {
@@ -149,6 +168,7 @@ export function EditPropertyModal({ property }: { property: any }) {
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
         lifestyleSections: updatedLifestyleSections,
         floorPlans: updatedFloorPlans,
+        overviewImage: finalOverviewImage,
       });
       setOpen(false);
     } catch (error) {
@@ -200,10 +220,27 @@ export function EditPropertyModal({ property }: { property: any }) {
               </div>
             </div>
 
+            {/* Section: Overview */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Overview</h3>
             <div className="space-y-2">
-              <Label htmlFor="description">Full Description</Label>
-              <Textarea id="description" name="description" defaultValue={property.description} required className="min-h-[100px]" />
+              <Label htmlFor="description">Description</Label>
+              <Textarea 
+                id="description" 
+                name="description" 
+                defaultValue={property.description} 
+                className="min-h-[120px] resize-y" 
+                required 
+              />
             </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="overviewImage">Overview Image (Update Optional)</Label>
+              <p className="text-xs text-muted-foreground mb-2">Upload a single image to appear directly beneath the Overview text.</p>
+              <Input id="overviewImage" name="overviewImage" type="file" accept="image/*" />
+              {property.overviewImage && <p className="text-xs text-green-600">✓ Current image set</p>}
+            </div>
+          </div>
           </div>
 
           <div className="space-y-4">

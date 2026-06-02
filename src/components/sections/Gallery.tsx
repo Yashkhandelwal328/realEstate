@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 export function Gallery({ posters = [] }: { posters?: string[] }) {
   const [open, setOpen] = useState<string | null>(null);
 
@@ -40,14 +40,35 @@ export function Gallery({ posters = [] }: { posters?: string[] }) {
         </div>
       </div>
 
-      <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
-        <DialogContent className="max-w-4xl bg-background border-primary/30 p-2">
-          <DialogTitle className="sr-only">Gallery image</DialogTitle>
-          {open && (
-            <img src={open} alt="Gallery enlarged" className="w-full h-auto rounded-lg" />
-          )}
-        </DialogContent>
-      </Dialog>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setOpen(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setOpen(null)}
+              className="absolute top-6 right-6 size-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors hover:scale-105"
+            >
+              <X className="size-6" />
+            </button>
+
+            <motion.img
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              src={open}
+              alt="Gallery enlarged"
+              className="max-h-[90vh] max-w-[95vw] object-contain rounded-lg shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

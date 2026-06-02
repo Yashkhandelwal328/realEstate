@@ -51,6 +51,7 @@ export function PropertyPageClient({ property }: { property: any }) {
   const images = property.images.length > 0 ? property.images : [PLACEHOLDER_IMG];
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [singleLightboxImage, setSingleLightboxImage] = useState<string | null>(null);
 
   // Gallery carousel
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -192,16 +193,22 @@ export function PropertyPageClient({ property }: { property: any }) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="mt-8 rounded-2xl overflow-hidden border border-primary/10 shadow-xl"
+                  className="mt-8 rounded-2xl overflow-hidden border border-primary/10 shadow-xl cursor-pointer group"
+                  onClick={() => setSingleLightboxImage(property.overviewImage)}
                 >
-                  <img 
-                    src={property.overviewImage} 
-                    alt="Property Overview" 
-                    className="w-full h-auto object-cover max-h-[500px]"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
+                  <div className="relative">
+                    <img 
+                      src={property.overviewImage} 
+                      alt="Property Overview" 
+                      className="w-full h-auto object-cover max-h-[500px] transition-transform duration-700 group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 text-white drop-shadow-md bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm transition-opacity">View Full</span>
+                    </div>
+                  </div>
                 </motion.div>
               )}
             </motion.div>
@@ -289,7 +296,10 @@ export function PropertyPageClient({ property }: { property: any }) {
                     className={`flex flex-col gap-10 lg:gap-16 items-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                   >
                     <div className="w-full md:w-1/2">
-                      <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl group">
+                      <div 
+                        className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                        onClick={() => sec.image && setSingleLightboxImage(sec.image)}
+                      >
                         <img 
                           src={sec.image || PLACEHOLDER_IMG} 
                           alt={sec.title}
@@ -298,6 +308,9 @@ export function PropertyPageClient({ property }: { property: any }) {
                             (e.target as HTMLImageElement).src = PLACEHOLDER_IMG;
                           }}
                         />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                          <span className="opacity-0 group-hover:opacity-100 text-white drop-shadow-md bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm transition-opacity">View Full</span>
+                        </div>
                         <div className="absolute inset-0 border border-primary/20 rounded-3xl pointer-events-none" />
                       </div>
                     </div>
@@ -344,16 +357,20 @@ export function PropertyPageClient({ property }: { property: any }) {
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  className="glass rounded-2xl p-6 border border-primary/10 hover:border-primary/40 transition-colors"
+                  className="glass rounded-2xl p-6 border border-primary/10 hover:border-primary/40 transition-colors cursor-pointer group"
+                  onClick={() => fp.image && setSingleLightboxImage(fp.image)}
                 >
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-6">
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-6 relative">
                     <img 
                       src={fp.image || PLACEHOLDER_IMG} 
                       alt={fp.title}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 text-white drop-shadow-md bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm transition-opacity">View Full</span>
+                    </div>
                   </div>
-                  <h4 className="font-display text-xl mb-1">{fp.title}</h4>
+                  <h4 className="font-display text-xl mb-1 group-hover:text-primary transition-colors">{fp.title}</h4>
                   <p className="text-primary font-medium">{fp.area}</p>
                 </motion.div>
               ))}
@@ -606,6 +623,37 @@ export function PropertyPageClient({ property }: { property: any }) {
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-sm font-medium tracking-widest text-white/70 bg-black/50 px-4 py-2 rounded-full">
               {lightboxIndex + 1} / {property.images.length}
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Single Image Lightbox ── */}
+      <AnimatePresence>
+        {singleLightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setSingleLightboxImage(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setSingleLightboxImage(null)}
+              className="absolute top-6 right-6 size-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors hover:scale-105"
+            >
+              <X className="size-6" />
+            </button>
+
+            <motion.img
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              src={singleLightboxImage}
+              alt="Full view"
+              className="max-h-[90vh] max-w-[95vw] object-contain rounded-lg shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
           </motion.div>
         )}
       </AnimatePresence>

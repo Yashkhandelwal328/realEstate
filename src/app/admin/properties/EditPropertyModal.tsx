@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, ImageIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +15,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { updateProperty, uploadPropertyImages } from "@/app/actions/property";
+import { updateProperty, uploadPropertyImages, uploadFiles } from "@/app/actions/property";
 import imageCompression from "browser-image-compression";
 
 export function EditPropertyModal({ property }: { property: any }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [lifestyleSections, setLifestyleSections] = useState<any[]>(property.lifestyleSections || []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,6 +57,27 @@ export function EditPropertyModal({ property }: { property: any }) {
         }
       }
 
+      const updatedLifestyleSections = [...lifestyleSections];
+      for (let i = 0; i < lifestyleSections.length; i++) {
+        const lfFile = formData.get(`lifestyle-image-${i}`) as File;
+        if (lfFile && lfFile.size > 0) {
+          let fileToUpload: File | Blob = lfFile;
+          try {
+            fileToUpload = await imageCompression(lfFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+          } catch (e) {
+            console.error("Compression failed", e);
+          }
+          
+          const singleLfData = new FormData();
+          singleLfData.append(`lifestyle-${i}`, fileToUpload, lfFile.name);
+          
+          const lfRes = await uploadFiles(singleLfData);
+          if (lfRes.success && lfRes.urls && lfRes.urls[`lifestyle-${i}`]) {
+            updatedLifestyleSections[i].image = lfRes.urls[`lifestyle-${i}`];
+          }
+        }
+      }
+
       await updateProperty(property.id, {
         title: (formData.get("title") as string) || "",
         slug: (formData.get("slug") as string) || property.slug,
@@ -76,6 +98,7 @@ export function EditPropertyModal({ property }: { property: any }) {
         isFeatured: formData.get("isFeatured") === "on",
         images: finalImageUrls,
         gmapsUrl: (formData.get("gmapsUrl") as string) || null,
+        lifestyleSections: updatedLifestyleSections,
       });
       setOpen(false);
     } catch (error) {
@@ -186,6 +209,30 @@ export function EditPropertyModal({ property }: { property: any }) {
               <Input id="reraNumber" name="reraNumber" defaultValue={property.reraNumber || ""} />
             </div>
           </div>
+
+          {/* Section: Lifestyle Portfolios */}
+          {lifestyleSections.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Lifestyle Sections</h3>
+              <p className="text-xs text-muted-foreground">Upload cinematic images to pair with the imported lifestyle text.</p>
+              
+              <div className="grid gap-6">
+                {lifestyleSections.map((sec, idx) => (
+                  <div key={idx} className="bg-muted/30 p-4 rounded-xl border border-primary/10">
+                    <h4 className="font-semibold">{sec.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1 mb-3">{sec.description}</p>
+                    <div className="space-y-2">
+                      <Label htmlFor={`lifestyle-image-${idx}`} className="flex items-center gap-2">
+                        <ImageIcon className="size-4" /> Update Section Image
+                      </Label>
+                      <Input id={`lifestyle-image-${idx}`} name={`lifestyle-image-${idx}`} type="file" accept="image/*" />
+                      {sec.image && <p className="text-xs text-green-600">✓ Current image set</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-4">
             <div className="space-y-2">

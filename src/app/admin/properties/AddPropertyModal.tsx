@@ -51,9 +51,26 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    
     try {
       let finalImageUrls = [...importedImages];
+      
+      const coverImageFile = formData.get("coverImage") as File;
+      if (coverImageFile && coverImageFile.size > 0) {
+        let fileToUpload: File | Blob = coverImageFile;
+        try {
+          fileToUpload = await imageCompression(coverImageFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+        } catch (e) {
+          console.error("Compression failed", e);
+        }
+        
+        const singleFormData = new FormData();
+        singleFormData.append("images", fileToUpload, coverImageFile.name);
+        
+        const galRes = await uploadPropertyImages(singleFormData);
+        if (galRes.success && galRes.urls && galRes.urls.length > 0) {
+           finalImageUrls.unshift(galRes.urls[0]); // Add to beginning (hero image)
+        }
+      }
       
       const imageFiles = formData.getAll("images") as File[];
       for (const f of imageFiles) {
@@ -272,7 +289,13 @@ export function AddPropertyModal({ open: externalOpen, setOpen: setExternalOpen,
           <div className="space-y-4">
             <h3 className="text-lg font-semibold border-b border-primary/20 pb-2">Media & Contact</h3>
             <div className="space-y-2">
-              <Label htmlFor="images">Main Property Gallery (Multiple)</Label>
+              <Label htmlFor="coverImage">Main Cover Image (Hero Image)</Label>
+              <p className="text-xs text-muted-foreground mb-2">Upload a single image to be used as the main hero banner for this property.</p>
+              <Input id="coverImage" name="coverImage" type="file" accept="image/*" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="images">Additional Property Gallery (Multiple)</Label>
               {importedImages.length > 0 && (
                 <p className="text-xs text-muted-foreground mb-2">Imported {importedImages.length} images.</p>
               )}

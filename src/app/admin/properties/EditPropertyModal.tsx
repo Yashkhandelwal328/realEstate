@@ -29,7 +29,30 @@ export function EditPropertyModal({ property }: { property: any }) {
     const formData = new FormData(e.currentTarget);
     
     try {
-      let finalImageUrls: string[] = property.images || [];
+      let finalImageUrls: string[] = property.images ? [...property.images] : [];
+      
+      const coverImageFile = formData.get("coverImage") as File;
+      if (coverImageFile && coverImageFile.size > 0) {
+        let fileToUpload: File | Blob = coverImageFile;
+        try {
+          fileToUpload = await imageCompression(coverImageFile, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+        } catch (error) {
+          console.error("Compression failed", error);
+        }
+        
+        const singleFormData = new FormData();
+        singleFormData.append("images", fileToUpload, coverImageFile.name);
+        
+        const res = await uploadPropertyImages(singleFormData);
+        if (res.success && res.urls && res.urls.length > 0) {
+          if (finalImageUrls.length > 0) {
+             finalImageUrls[0] = res.urls[0];
+          } else {
+             finalImageUrls.push(res.urls[0]);
+          }
+        }
+      }
+
       const imageFiles = formData.getAll("images") as File[];
       
       if (imageFiles.length > 0 && imageFiles[0].size > 0) {
@@ -46,11 +69,15 @@ export function EditPropertyModal({ property }: { property: any }) {
           
           const res = await uploadPropertyImages(singleFormData);
           if (res.success && res.urls) {
-            // Because edit replaces images, we should reset finalImageUrls on the first successful upload
-            // Wait, currently it replaces ALL images if NEW ones are uploaded.
-            // Let's do it safely: if this is the first image uploaded in this batch, clear the old ones.
-            if (finalImageUrls === property.images) {
-              finalImageUrls = [];
+            // If new gallery images are uploaded, they REPLACE the existing gallery except the cover image (if we just uploaded a new one, we should keep it).
+            // Actually, if we upload new gallery, let's just clear and append. But if we already updated the cover image, we should keep the cover image and append the rest?
+            // To be safe, if we upload a new gallery, we clear the old one. If coverImage was also uploaded, we keep it as index 0.
+            if (finalImageUrls === property.images || finalImageUrls.length === property.images?.length) {
+              // We haven't cleared it yet. 
+              // Wait, if cover image was uploaded, finalImageUrls has same length, just index 0 is different.
+              // We should just clear it, but preserve finalImageUrls[0] IF coverImage was uploaded.
+              const savedCover = coverImageFile && coverImageFile.size > 0 ? finalImageUrls[0] : null;
+              finalImageUrls = savedCover ? [savedCover] : [];
             }
             finalImageUrls.push(...res.urls);
           }
@@ -236,7 +263,13 @@ export function EditPropertyModal({ property }: { property: any }) {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="images">Photos (Upload new to replace existing)</Label>
+              <Label htmlFor="coverImage">Main Cover Image (Replaces Hero Image)</Label>
+              <p className="text-xs text-muted-foreground mb-2">Upload a single image to change the main hero image without clearing the rest of the gallery.</p>
+              <Input id="coverImage" name="coverImage" type="file" accept="image/*" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="images">Gallery Photos (Upload new to replace ALL existing gallery photos)</Label>
               {property.images && property.images.length > 0 && (
                 <p className="text-xs text-muted-foreground mb-2">Currently has {property.images.length} photos.</p>
               )}
